@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rest_api_flutter/model/user.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -11,7 +12,7 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
-  List<dynamic> users = [];
+  List<User> users = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,25 +24,14 @@ class _HomescreenState extends State<Homescreen> {
           itemCount: users.length,
           itemBuilder: (context, index) {
             final user = users[index];
-            final email = user['email'];
-            final firstName = user['name']['first'];
-            final lastName = user['name']['last'];
-            final profile = user['picture']['large'];
-
+            final color =
+                user.gender == 'male' ? Colors.blueAccent : Colors.pinkAccent;
             return ListTile(
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  setState(() {
-                    users.removeAt(index);
-                  });
-                },
-              ),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(profile),
-              ),
-              title: Text(' $firstName $lastName'),
-              subtitle: Text(email),
+              leading: Text(index.toString()),
+              title: Text(
+                  "${user.name.title} ${user.name.first} ${user.name.last}"),
+              subtitle: Text(user.phone),
+              tileColor: color,
             );
           }),
       floatingActionButton: FloatingActionButton(onPressed: fetchUsers),
@@ -55,9 +45,20 @@ class _HomescreenState extends State<Homescreen> {
     final response = await http.get(uri);
     final body = response.body;
     final json = jsonDecode(body);
+    final results = json['results'] as List<dynamic>;
     setState(() {
-      users = json['results'];
+      users = results.map((user) {
+        return User(
+            UserName(
+                title: user['name']['title'],
+                first: user['name']['first'],
+                last: user['name']['last']),
+            gender: user['gender'],
+            email: user['email'],
+            phone: user['phone'],
+            cell: user['cell']);
+      }).toList();
     });
-    debugPrint(json.toString());
+    debugPrint(results.toString());
   }
 }
