@@ -25,29 +25,13 @@ class UserApi {
           UserName(
               title: user['name']['title'],
               first: user['name']['first'],
-              last: user['name']['last'],
-
-// class UserApi {
-//   static Future<List<User>> fetchUser() async {
-//     debugPrint('Fetching users...');
-//     const url = 'https://randomuser.me/api/?results=10';
-//     final uri = Uri.parse(url);
-//     final response = await http.get(uri);
-//     final body = response.body;
-//     final json = jsonDecode(body);
-//     final results = json['results'] as List<dynamic>;
-//     final users = results.map((user) {
-//       return User(
-//           UserName(
-//               title: user['name']['title'],
-//               first: user['name']['first'],
-//               last: user['name']['last']),
-//           gender: user['gender'],
-//           email: user['email'],
-//           phone: user['phone'],
-//           cell: user['cell']);
-//     }).toList();
-//     debugPrint(users.toString());
-//     return users;
-//   }
-// }
+              last: user['name']['last']),
+          gender: user['gender'],
+          email: user['email'],
+          phone: user['phone'],
+          cell: user['cell']);
+    }).toList();
+    debugPrint(users.toString());
+    return users;
+  }
+}
