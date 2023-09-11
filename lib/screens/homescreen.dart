@@ -33,8 +33,8 @@ class _HomescreenState extends State<Homescreen> {
                 user.gender == 'male' ? Colors.blueAccent : Colors.pinkAccent;
             return ListTile(
               leading: Text(index.toString()),
-              title: Text(user.fullName),
-              subtitle: Text(user.phone),
+              title: Text(user.name.first),
+              subtitle: Text(user.dob.date.toString()),
               tileColor: color,
             );
           }),
